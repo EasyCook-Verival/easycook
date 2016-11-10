@@ -71,6 +71,8 @@ gem 'acts-as-taggable-on', '~> 4.0'
 group :test do
   gem "simplecov"
   gem "codeclimate-test-reporter", "~> 1.0.0"
+  gem 'cucumber-rails', :require => false
+  gem 'database_cleaner'
 end
 
 
