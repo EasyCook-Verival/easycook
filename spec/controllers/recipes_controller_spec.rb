@@ -71,22 +71,6 @@ RSpec.describe RecipesController, type: :controller do
       get :new, session: valid_session
       expect(assigns(:recipe)).to be_a_new(Recipe)
     end
-
-    it 'search for ingredients on recipe creation' do
-      ingredients = ["Alcaparra", "Pimenta", "Cominho", "Alho"].each do |name|
-        Ingredient.create! name: name, description: name
-      end
-      get :new, :search=>"pim", session: valid_session
-      expect(assigns(:ingredients).size).to eq(1)
-    end
-
-    it 'sort ingredients by name by default on recipe creation' do
-      ingredients = ["Alcaparra", "Pimenta"]
-      get :new, :search=>nil, session: valid_session
-
-      expect(assigns(:ingredients).first.name).to eq(ingredients.first)
-      expect(assigns(:ingredients).last.name).to eq(ingredients.last)
-    end
   end
 
   describe 'GET #edit' do
@@ -197,6 +181,7 @@ RSpec.describe RecipesController, type: :controller do
 
   describe 'DELETE #destroy' do
     it 'destroys the requested recipe' do
+      sign_in @cook
       recipe = Recipe.create! valid_attributes
       expect do
         delete :destroy, { id: recipe.to_param }, session: valid_session
@@ -204,7 +189,9 @@ RSpec.describe RecipesController, type: :controller do
     end
 
     it 'redirects to the recipes list' do
+      sign_in @cook
       recipe = Recipe.create! valid_attributes
+      @cook.recipes << recipe
       delete :destroy, { id: recipe.to_param }, session: valid_session
       expect(response).to redirect_to(recipes_url)
     end
