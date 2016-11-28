@@ -183,6 +183,7 @@ RSpec.describe RecipesController, type: :controller do
     it 'destroys the requested recipe' do
       sign_in @cook
       recipe = Recipe.create! valid_attributes
+      @cook.recipes << recipe
       expect do
         delete :destroy, { id: recipe.to_param }, session: valid_session
       end.to change(Recipe, :count).by(-1)
