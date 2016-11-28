@@ -23,7 +23,7 @@ RSpec.describe RecipesController, type: :controller do
   # Recipe. As you add validations to Recipe, be sure to
   # adjust the attributes here as well.
   before(:each) do
-    RecipesController.class_variable_set(:@@recipes_builder, MainPlateBuilder.new)
+    # RecipesController.class_variable_set(:@@recipes_builder, MainPlateBuilder.new)
     Ingredient.create!({ name: 'MyString', description: 'MyText' })
 
     User.destroy_all
@@ -70,6 +70,22 @@ RSpec.describe RecipesController, type: :controller do
     it 'assigns a new recipe as @recipe' do
       get :new, session: valid_session
       expect(assigns(:recipe)).to be_a_new(Recipe)
+    end
+
+    it 'search for ingredients on recipe creation' do
+      ingredients = ["Alcaparra", "Pimenta", "Cominho", "Alho"].each do |name|
+        Ingredient.create! name: name, description: name
+      end
+      get :new, :search=>"pim", session: valid_session
+      expect(assigns(:ingredients).size).to eq(1)
+    end
+
+    it 'sort ingredients by name by default on recipe creation' do
+      ingredients = ["Alcaparra", "Pimenta"]
+      get :new, :search=>nil, session: valid_session
+
+      expect(assigns(:ingredients).first.name).to eq(ingredients.first)
+      expect(assigns(:ingredients).last.name).to eq(ingredients.last)
     end
   end
 

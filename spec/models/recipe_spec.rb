@@ -4,13 +4,13 @@ RSpec.describe Recipe, type: :model do
   it 'saves a valid recipe' do
     #pending: Add proper validations to Recipe model
     # recipe can save even with blank fields...
-    recipe = Recipe.new
+    recipe = Recipe.new name:'test', description:'test', instructions:'test'
     expect(recipe.validate).to eq(true)
     expect(recipe.save).to eq(true)
   end
 
   it 'acts as taggable' do
-    recipe = Recipe.create!
+    recipe = Recipe.create! name:'test', description:'test', instructions:'test'
 
     recipe.tag_list.add 'first'
     recipe.tag_list.add 'second'
