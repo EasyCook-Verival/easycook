@@ -10,6 +10,8 @@
 
 <%= render '/layouts/header', method: :get %>
 <%= yield %>
+<%= render 'layouts/notice' %>
+<%= render '/layouts/footer', method: :get %>
 
 </body>
 </html>
